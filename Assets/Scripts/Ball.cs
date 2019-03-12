@@ -30,9 +30,7 @@ public class Ball : MonoBehaviour
         if (col.gameObject.name == "RacketLeft")
         {
             // Calculate hit Factor
-            float y = hitFactor(transform.position,
-                col.transform.position,
-                col.collider.bounds.size.y);
+            float y = hitFactor(gameObject, col);
 
             // Calculate direction, make length=1 via .normalized
             Vector2 dir = new Vector2(1, y).normalized;
@@ -45,9 +43,7 @@ public class Ball : MonoBehaviour
         if (col.gameObject.name == "RacketRight")
         {
             // Calculate hit Factor
-            float y = hitFactor(transform.position,
-                col.transform.position,
-                col.collider.bounds.size.y);
+            float y = hitFactor(gameObject, col);
 
             // Calculate direction, make length=1 via .normalized
             Vector2 dir = new Vector2(-1, y).normalized;
@@ -57,15 +53,15 @@ public class Ball : MonoBehaviour
         }
     }
 
-    float hitFactor(Vector2 ballPos, Vector2 racketPos,
-        float racketHeight)
-    {
+    float hitFactor(GameObject b, Collision2D p) {
         // ascii art:
         // ||  1 <- at the top of the racket
         // ||
         // ||  0 <- at the middle of the racket
         // ||
         // || -1 <- at the bottom of the racket
-        return (ballPos.y - racketPos.y) / racketHeight;
+        return (b.transform.position.y - p.gameObject.transform.position.y) / p.collider.bounds.size.y;
     }
+
+
 }
