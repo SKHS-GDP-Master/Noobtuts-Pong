@@ -53,6 +53,4 @@ public class Ball : MonoBehaviour
         // || -1 <- at the bottom of the racket
         return (b.transform.position.y - p.gameObject.transform.position.y) / p.collider.bounds.size.y;
     }
-
-
 }
