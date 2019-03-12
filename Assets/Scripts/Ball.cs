@@ -6,11 +6,14 @@ public class Ball : MonoBehaviour
 {
     public float speed = 30;
 
+    private Rigidbody2D rb;
+
     // Start is called before the first frame update
     void Start()
     {
         // Initial Velocity
-        GetComponent<Rigidbody2D>().velocity = Vector2.right * speed;
+        rb = GetComponent<Rigidbody2D>();
+        rb.velocity = Vector2.right * speed;
     }
 
     // Update is called once per frame
@@ -26,31 +29,19 @@ public class Ball : MonoBehaviour
         //   col.transform.position is the racket's position
         //   col.collider is the racket's collider
 
+        float y = hitFactor(gameObject, col);
+        Vector2 dir = Vector2.zero;
+        
         // Hit the left Racket?
-        if (col.gameObject.name == "RacketLeft")
-        {
-            // Calculate hit Factor
-            float y = hitFactor(gameObject, col);
-
+        if (col.gameObject.name == "RacketLeft") {
             // Calculate direction, make length=1 via .normalized
-            Vector2 dir = new Vector2(1, y).normalized;
-
-            // Set Velocity with dir * speed
-            GetComponent<Rigidbody2D>().velocity = dir * speed;
-        }
-
-        // Hit the right Racket?
-        if (col.gameObject.name == "RacketRight")
-        {
-            // Calculate hit Factor
-            float y = hitFactor(gameObject, col);
-
+            dir = new Vector2(1, y).normalized;
+        } else if (col.gameObject.name == "RacketRight") {
             // Calculate direction, make length=1 via .normalized
-            Vector2 dir = new Vector2(-1, y).normalized;
-
-            // Set Velocity with dir * speed
-            GetComponent<Rigidbody2D>().velocity = dir * speed;
+            dir = new Vector2(-1, y).normalized;
         }
+        // Set Velocity with dir * speed
+        rb.velocity = dir * speed;
     }
 
     float hitFactor(GameObject b, Collision2D p) {
