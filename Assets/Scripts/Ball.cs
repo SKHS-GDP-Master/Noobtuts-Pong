@@ -19,6 +19,11 @@ public class Ball : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Recalculate speed on each frame so that we can
+        // troubleshoot escaping ball bug.
+        var vel = rb.velocity.normalized; // Extract angular part of the velocity.
+        vel *= speed;
+        rb.velocity = vel;
     }
 
     void OnCollisionEnter2D(Collision2D col)
@@ -29,19 +34,22 @@ public class Ball : MonoBehaviour
         //   col.transform.position is the racket's position
         //   col.collider is the racket's collider
 
-        float y = hitFactor(gameObject, col);
-        Vector2 dir = Vector2.zero;
-        
-        // Hit the left Racket?
-        if (col.gameObject.name == "RacketLeft") {
-            // Calculate direction, make length=1 via .normalized
-            dir = new Vector2(1, y).normalized;
-        } else if (col.gameObject.name == "RacketRight") {
-            // Calculate direction, make length=1 via .normalized
-            dir = new Vector2(-1, y).normalized;
+        if (col.gameObject.name == "RacketLeft" || col.gameObject.name == "RacketRight") {
+            float y = hitFactor(gameObject, col);
+            Vector2 dir = Vector2.one;
+
+            // Hit the left Racket?
+            if (col.gameObject.name == "RacketLeft") {
+                // Calculate direction, make length=1 via .normalized
+                dir = new Vector2(1, y).normalized;
+            } else {
+                // Calculate direction, make length=1 via .normalized
+                dir = new Vector2(-1, y).normalized;
+            }
+
+            // Set Velocity with dir * speed
+            rb.velocity = dir * speed;
         }
-        // Set Velocity with dir * speed
-        rb.velocity = dir * speed;
     }
 
     float hitFactor(GameObject b, Collision2D p) {
