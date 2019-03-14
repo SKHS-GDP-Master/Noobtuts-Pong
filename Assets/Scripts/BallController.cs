@@ -36,9 +36,9 @@ public class BallController : MonoBehaviour
         //   col.transform.position is the paddle's position
         //   col.collider is the paddle's collider
 
-        if (col.gameObject.name == "RacketLeft" || col.gameObject.name == "RacketRight") {
+        if (col.gameObject.name == "PaddleLeft" || col.gameObject.name == "PaddleRight") {
             float y = hitFactor(gameObject, col);
-            Vector2 dir = Vector2.one;
+            Vector2 dir;
 
             // Hit the left Racket?
             if (col.gameObject.name == "RacketLeft") {
