@@ -19,8 +19,10 @@ public class BallController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Recalculate speed on each frame so that we can
-        // troubleshoot escaping ball bug.
+        // Recalculate speed on each frame to help with
+        // troubleshooting the escaping ball. This lets
+        // us pick up speed changes even if the ball is
+        // no longer colliding with the paddles.
         var vel = rb.velocity.normalized; // Extract angular part of the velocity.
         vel *= speed;
         rb.velocity = vel;
@@ -29,10 +31,10 @@ public class BallController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D col)
     {
         // Note: 'col' holds the collision information. If the
-        // Ball collided with a racket, then:
-        //   col.gameObject is the racket
-        //   col.transform.position is the racket's position
-        //   col.collider is the racket's collider
+        // Ball collided with a paddle, then:
+        //   col.gameObject is the paddle
+        //   col.transform.position is the paddle's position
+        //   col.collider is the paddle's collider
 
         if (col.gameObject.name == "RacketLeft" || col.gameObject.name == "RacketRight") {
             float y = hitFactor(gameObject, col);
@@ -54,11 +56,11 @@ public class BallController : MonoBehaviour
 
     float hitFactor(GameObject b, Collision2D p) {
         // ascii art:
-        // ||  1 <- at the top of the racket
+        // ||  1 <- at the top of the paddle
         // ||
-        // ||  0 <- at the middle of the racket
+        // ||  0 <- at the middle of the paddle
         // ||
-        // || -1 <- at the bottom of the racket
+        // || -1 <- at the bottom of the paddle
         return (b.transform.position.y - p.gameObject.transform.position.y) / p.collider.bounds.size.y;
     }
 }
